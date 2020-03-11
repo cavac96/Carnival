@@ -1,5 +1,6 @@
 import helpers.BaseTest;
 import org.junit.Test;
+import pages.ItineraryPage;
 import pages.SearchResultPage;
 
 import java.util.List;
@@ -54,5 +55,16 @@ public class CarnivalTest extends BaseTest {
         SearchResultPage searchResultPage = homePage.searchCruises();
         searchResultPage.filterByPrice();
         searchResultPage.assertDuration(duration);
+    }
+
+    @Test
+    public void viewItinerary() {
+        homePage.closeModal();
+        homePage.selectSailTo();
+        SearchResultPage searchResultPage = homePage.searchCruises();
+        ItineraryPage itineraryPage = searchResultPage.openItinerary();
+        itineraryPage.assertItineraryPageIsLoaded();
+        itineraryPage.assertCardForEachDay();
+        itineraryPage.assertBookingButtonExists();
     }
 }

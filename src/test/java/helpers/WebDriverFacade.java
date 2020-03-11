@@ -11,7 +11,7 @@ import java.util.List;
 
 public class WebDriverFacade {
     private static WebDriver webDriver;
-    private static int WAIT_SECONDS = 5;
+    private static int WAIT_SECONDS = 10;
 
     public WebDriverFacade(WebDriver webDriver){
         this.webDriver =  webDriver;

@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import utils.Utils;
 
 import java.util.List;
@@ -24,8 +25,9 @@ public class SearchResultPage extends BasePage {
     private final String TITLE_CARD_PATH = "//span[contains(@class,'main-text')]";
     private final String INFORMATION_BUTTON_PATH = "//div[@class='vrgf-price-box']";
     private final String DATES_PATH = "//div[@class='spg-content']//div[@class='slick-track']//p";
-    private final String CRUISE_DATE_PATH = "//ccl-cruise-glance//span[contains(@class,'duration-title')]//" +
+    private final String CRUISE_DURATION_PATH = "//ccl-cruise-glance//span[contains(@class,'duration-title')]//" +
             "span[contains(text(), 'Day')]";
+    private final String LEARN_MORE_BUTTON_PATH = "//div[@class='vrgf-learn-more']/a";
 
     public SearchResultPage(WebDriver webDriver) {
         super(webDriver);
@@ -71,7 +73,7 @@ public class SearchResultPage extends BasePage {
 
         int index = Utils.getRandomSelectIndex(resultList.size());
         WebElement randomChoice = webDriverFacade.waitForVisibilityOfElement(resultList.get(index));
-        WebElement actualResult = randomChoice.findElement(By.xpath(CRUISE_DATE_PATH));
+        WebElement actualResult = randomChoice.findElement(By.xpath(CRUISE_DURATION_PATH));
         List<Integer> duration = Utils.parseDayText(actualResult.getText());
 
         if(durationLimits.size() > 1) {
@@ -91,4 +93,17 @@ public class SearchResultPage extends BasePage {
         pricingButton.click();
     }
 
+    public ItineraryPage openItinerary() {
+        webDriverFacade.waitForVisibilityOfElement(resultContainer);
+        List<WebElement> resultList = webDriverFacade.findElementsByLocator(By.xpath(CARDS_PATH));
+
+        int index = Utils.getRandomSelectIndex(resultList.size());
+        WebElement randomChoice = webDriverFacade.waitForVisibilityOfElement(resultList.get(index));
+
+        WebElement learnMoreButton = randomChoice.findElement(By.xpath(LEARN_MORE_BUTTON_PATH));
+        webDriverFacade.waitForVisibilityOfElement(learnMoreButton);
+        learnMoreButton.click();
+
+        return PageFactory.initElements(webDriverFacade.getWebDriver(), ItineraryPage.class);
+    }
 }
